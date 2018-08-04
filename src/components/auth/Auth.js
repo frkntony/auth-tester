@@ -64,10 +64,14 @@ export default class Auth extends Component {
 		const password = this.refs.password.value
 		//console.log(email, password)
 
-		firebase().auth().signInWithEmailAndPassword(email, password)
+		firebase.auth().signInWithEmailAndPassword(email, password)
 		.then( (fuckingBomb) => {
-			console.log(fuckingBomb)
-			console.log(`well mate you are in! enjoy the stay ;)`)
+			// console.log(fuckingBomb)
+			// console.log(`well mate you are in! enjoy the stay ;)`)
+			// TODO: write a simple message for user
+			document.getElementById('signOut').classList.remove('hide')
+			document.getElementById('signIn').classList.add('hide')
+			document.getElementById('signUp').classList.add('hide')
 		})
 		.catch( (e) => {
 			this.setState( { userAuthMessage: e.message } )
@@ -78,8 +82,12 @@ export default class Auth extends Component {
 
 	// signs out a user
 	signOut = (e) => {
-		console.log(`signOut clicked but it wasn't coded yet`)
-		// to:do sign out
+
+		// TO:DO msg to usr
+		firebase.auth().signOut()
+		document.getElementById('signOut').classList.add('hide')
+		document.getElementById('signIn').classList.remove('hide')
+		document.getElementById('signUp').classList.remove('hide')
 	}
 
 
@@ -96,9 +104,9 @@ export default class Auth extends Component {
 				{this.state.err}
 				<br />
 
-				<button onClick={this.signUp}>Sign Up</button>
-				<button onClick={this.signIn}>Sign In</button>
-				<button onClick={this.signOut}>Sign Out</button>
+				<button id='signUp' onClick={this.signUp}>Sign Up</button>
+				<button id='signIn' onClick={this.signIn}>Sign In</button>
+				<button id='signOut' className='hide' onClick={this.signOut}>Sign Out</button>
 
 			</div>
 		)
