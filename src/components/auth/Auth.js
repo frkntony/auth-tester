@@ -35,6 +35,7 @@ export default class Auth extends Component {
 		firebase.auth().createUserWithEmailAndPassword(email, password)
 			.then((user) => {
 
+				this.setState( {userAuthMessage: email + ' account was created.'} )
 				console.log('created user data')
 				console.log(user.user)
 
@@ -68,6 +69,9 @@ export default class Auth extends Component {
 		.then( (fuckingBomb) => {
 			// console.log(fuckingBomb)
 			// console.log(`well mate you are in! enjoy the stay ;)`)
+
+			this.setState( {userAuthMessage: 'Welcome, ' + email} )
+
 			// TODO: write a simple message for user
 			document.getElementById('signOut').classList.remove('hide')
 			document.getElementById('signIn').classList.add('hide')
@@ -83,6 +87,7 @@ export default class Auth extends Component {
 	// signs out a user
 	signOut = (e) => {
 
+		this.setState( {userAuthMessage: 'Thanks for using the app, see you!'} )
 		// TO:DO msg to usr
 		firebase.auth().signOut()
 		document.getElementById('signOut').classList.add('hide')
@@ -101,7 +106,7 @@ export default class Auth extends Component {
 				<label htmlFor='password'>Password</label>
 				<input type='password' id='password' ref='password' placeholder='*********' />
 				<br />
-				{this.state.err}
+				{this.state.userAuthMessage}
 				<br />
 
 				<button id='signUp' onClick={this.signUp}>Sign Up</button>
