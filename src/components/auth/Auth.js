@@ -76,6 +76,8 @@ export default class Auth extends Component {
 			document.getElementById('signOut').classList.remove('hide')
 			document.getElementById('signIn').classList.add('hide')
 			document.getElementById('signUp').classList.add('hide')
+			document.getElementById('googleSignIn').classList.add('hide')
+
 		})
 		.catch( (e) => {
 			this.setState( { userAuthMessage: e.message } )
@@ -93,6 +95,33 @@ export default class Auth extends Component {
 		document.getElementById('signOut').classList.add('hide')
 		document.getElementById('signIn').classList.remove('hide')
 		document.getElementById('signUp').classList.remove('hide')
+		document.getElementById('googleSignIn').classList.remove('hide')
+	}
+
+	googleSignIn = (e) => {
+		console.log('google btn clicked')
+
+		let provider = new firebase.auth.GoogleAuthProvider()
+		firebase.auth().signInWithPopup(provider)
+		.then( result => {
+			console.log(result)
+			let user = result.user
+
+			this.setState( {userAuthMessage: 'Welcome, ' + user.displayName} )
+			firebase.database().ref('users/' + user.uid).set({
+				email: user.email,
+				name: user.displayName
+			})
+
+			document.getElementById('signOut').classList.remove('hide')
+			document.getElementById('signIn').classList.add('hide')
+			document.getElementById('signUp').classList.add('hide')
+			document.getElementById('googleSignIn').classList.add('hide')
+		})
+		.catch( (e) => {
+			console.log(e.message)
+		})
+
 	}
 
 
@@ -112,6 +141,8 @@ export default class Auth extends Component {
 				<button id='signUp' onClick={this.signUp}>Sign Up</button>
 				<button id='signIn' onClick={this.signIn}>Sign In</button>
 				<button id='signOut' className='hide' onClick={this.signOut}>Sign Out</button>
+				<br />
+				<button id='googleSignIn' className='google' onClick={this.googleSignIn}>Sign In With Google</button>
 
 			</div>
 		)
